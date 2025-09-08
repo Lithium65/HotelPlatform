@@ -1,0 +1,35 @@
+        .btn-dark-gold {
+           background-color: #d4af37;
+           border-color: #d4af37;
+           color: #333;
+       }
+
+       .btn-dark-gold:hover {
+           background-color: #b39329;
+           border-color: #b39329;
+           color: #DAA520;
+       }
+
+                .btn-dark-gold {
+            background-color: #d4af37;
+            border-color: #d4af37;
+            color: #333;
+        }
+
+        .btn-dark-gold:hover {
+            background-color: #b39329;
+            border-color: #b39329;
+            color: #DAA520;
+        }
+
+        .navbar {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .navbar-brand, .nav-link {
+        color: #fff !important;
+    }
+         .main-content {
+            flex-grow: 1;
+        }

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+    <link rel="canonical" href="https://bootstrap-4.ru/docs/5.0/examples/heroes/">
+    <title>Домашнаяя страница</title>
+    <link rel="stylesheet" href="/static/css/greeting.css">
+</head>
+<body>
+<div th:insert="~{parts/navbar_macro :: navbar}"></div>
+<section class="pt-5 bg-dark-gold">
+    <div class="container">
+        <div class="row">
+            <form th:action="@{/search}" method="post" class="row gy-3 mb-3" novalidate onsubmit="return validateForm()">
+                <div class="col-md-4">
+                    <label for="city" class="form-label">Город</label>
+                    <input type="text" class="form-control" id="city" name="city" placeholder="Введите город" autocomplete="off" required/>
+                </div>
+                <div class="col-md-2">
+                    <label for="numberOfPeople" class="form-label">Количество человек</label>
+                    <select class="form-select" id="numberOfPeople" name="numberOfPeople" required>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5+</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex justify-content-center">
+                    <div>
+                        <label for="baby" class="form-label">Места для детей</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="baby" name="baby">
+                            <label class="form-check-label" for="baby">Нужны</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label for="checkinDate" class="form-label">Дата въезда</label>
+                    <input type="date" class="form-control" id="checkinDate" name="checkinDate" required>
+                </div>
+                <div class="col-md-2">
+                    <label for="checkoutDate" class="form-label">Дата выезда</label>
+                    <input type="date" class="form-control" id="checkoutDate" name="checkoutDate" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Поиск</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="container py-4">
+                <div class="p-5 mb-4 bg-light rounded-3">
+                    <div class="container-fluid py-5">
+                        <h1 class="display-5 fw-bold">Номера</h1>
+                        <p class="col-md-10 fs-4">Не знаете, куда ехать?
+                            Просмотрите список всех номеров наших партнеров!</p>
+                        <a th:href="@{/all-rooms}" class="btn btn-dark-gold">Выбор номера</a>
+                    </div>
+                </div>
+                <div class="row align-items-md-stretch">
+                    <div class="col-md-6">
+                        <div class="h-100 p-5 text-white bg-dark rounded-3">
+                            <h2>Отели</h2>
+                            <p>Множество отелей на любой вкус. Найдите свой уютный уголок в любом уголке стран мира.
+                                Наши партнеры предоставят лучшие условия для ваших лучших путешествий</p>
+                            <a th:href="@{/hotels-view}" class="btn btn-outline-light">Отели</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="h-100 p-5 bg-light border rounded-3">
+                            <h2>Есть, что пердложить?</h2>
+                            <p>Есть предложения по улучшению сайта? Вы владелец отеля, и хотите сотрудничать?
+                                Заполните форму, и вы обязательно будете услышаны!</p>
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLScDhYpZZQZJ64q2WaKz9R0s-dIgxG1TYrWu-j7AcIPyRdYyEA/viewform?usp=sf_link" class="btn btn-outline-secondary" type="button">Отзыв</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-dark-gold">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="display-4 text-white">Впервые тут?</h1>
+                <p class="lead text-white">Узнайте больше про нас, и все сомнения срау же отпадут!</p>
+            </div>
+            <div class="container mt-3">
+                <div class="row">
+                    <div class="col-4">
+                        <a th:href="@{/about}" class="btn btn-dark-gold">Больше информации о нас</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="container text-center">
+            <h1 class="display-4 text-black">Самые популярные города</h1>
+            <p class="lead text-black">Просмотрите самые популярные направления, и вы точно отлично проведете время!</p>
+        </div>
+        <div id="menuCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://i.ibb.co/CJC2Y76/1266506010.jpg" class="d-block w-100" alt="Room Image 1">
+                    <div class="carousel-caption d-flex justify-content-center align-items-center">
+                        <div>
+                            <h5>Москва</h5>
+                            <p>Кремль, Красная площадь, Арбат.</p>
+                            <a href="#" class="btn btn-dark-gold" data-city="Москва">Москва</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://i.ibb.co/p23bJC2/shutterstock-112137761-1.jpg" class="d-block w-100" alt="Room Image 2">
+                    <div class="carousel-caption d-flex justify-content-center align-items-center">
+                        <div>
+                            <h5>Париж</h5>
+                            <p>Лувр, Эйфелева башня, Триумфальная арка.</p>
+                            <a href="#" class="btn btn-dark-gold" data-city="Париж">Париж</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://i.ibb.co/gSQJBWG/View-of-Empire-State-Building-from-Rockefeller-Center-New-York-City-dllu.jpg" class="d-block w-100" alt="Room Image 3">
+                    <div class="carousel-caption d-flex justify-content-center align-items-center">
+                        <div>
+                            <h5>Нью-Йорк</h5>
+                            <p>Статуя свободы, Эмпайр-Стэйт, WTC.</p>
+                            <a href="#" class="btn btn-dark-gold" data-city="Нью-Йорк">Нью-Йорк</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-dark-gold bg-image-help">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="display-4 text-white" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Впервые отправляетесь в путешествие?</h1>
+                <p class="lead text-white" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);">Прочтите краткий блог, чтобы избежать распространенных ошибок и организовать своё путешествие мечты!</p>
+            </div>
+            <div class="container mt-3">
+                <div class="row">
+                    <div class="col-4">
+                        <a href="https://lifehacker.ru/special/travel/" class="btn btn-dark-gold">Краткий блог!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="container text-center">
+                <h1 class="display-4 text-black">Не знаете, как найти наш офис?</h1>
+                <p class="lead text-black">Используйте интерактивную карту!</p>
+            </div>
+            <div class="d-flex justify-content-center">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1368.9471964039924!2d27.57018899472457!3d53.90492567788054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46dbcfbf258a09ad%3A0xa3a00619e9f9f88c!2z0L_RgC4g0J3QtdC30LDQstC40YHQuNC80L7RgdGC0LggMzJCLCDQnNC40L3RgdC6LCDQnNC40L3RgdC60LDRjyDQvtCx0LvQsNGB0YLRjA!5e0!3m2!1sru!2sby!4v1714739238916!5m2!1sru!2sby" width="700" height="425" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-dark-gold bg-image-avia">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="display-4 text-white" style="text-shadow: 12px 12px 24px rgba(0, 0, 0, 1);">Не знаете, как организовать свою дорогу?</h1>
+                <p class="lead text-white" style="text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9);">HotelHelp тесно сотрудничает с сервисом поиска авиабилетов AviaSales! Используйте промокод #Hotel16 и получите скидку на первый перелёт!</p>
+            </div>
+            <div class="container mt-3">
+                <div class="row">
+                    <div class="col-4">
+                        <a href="https://www.aviasales.by/?marker=186703.google_ppc_by_MSQ_sr_bd&utm_source=ga&utm_medium=cpc&utm_campaign_id=14317138050&utm_adgroup_id=129043533994&utm_content_id=570631537409&utm_extension_id=&term_match_type=e&utm_term=aviasales&utm_term_id=kwd-42393665022&network=g&placement=&position=&device=c.&geo=.9197375&gad_source=1&gclid=Cj0KCQiA0fu5BhDQARIsAMXUBOJ3TcNU-kYbQHwQ7ingOM6aOh26s4m_rDQLOZQ_x-xsKT9MQJg_lx0aAuCwEALw_wcB&params=1" class="btn btn-dark-gold">В путь!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="row">
+                <div class="mb-5 d-flex justify-content-center">
+                    <h1 class="display-4 text-black">Вот ещё несколько преимуществ HotelHelp.</h1>
+                </div>
+                <div class="col-lg-4">
+                    <img src="https://www.kayak.co.uk/news/wp-content/uploads/sites/5/2023/08/THEME_HOTEL_SIGN_FIVE_STARS_FACADE_BUILDING_GettyImages-1320779330-3.jpg" class="bd-placeholder-img rounded-circle" width="140" height="135" alt="Your Image">
+
+                    <h2>Огромный выбор</h2>
+                    <p> Любой отель на любой вкус, любой город, любая страна. Что ещё нужно для путешествия, запоминающегося на всю жизнь?</p>
+                </div>
+                <div class="col-lg-4">
+                    <img src="https://upraise.io/wp-content/uploads/2019/11/How-To-Make-The-Most-Of-Business-Meetings-Banner.png" class="bd-placeholder-img rounded-circle" width="140" height="135" alt="Your Image">
+                    <h2>Проверенные партнеры</h2>
+                    <p>Все отели проходят проверку нашими экспертами перед добавлением их на наш сайт. Забудьте про соседство с разной мелкой живностью.</p>
+                </div>
+                <div class="col-lg-4">
+                    <img src="https://aremorch.com/wp-content/uploads/2016/09/The-Details-That-Matter-Top-Things-Every-Luxury-Hotel-Room-Should-Have.png" class="bd-placeholder-img rounded-circle" width="140" height="135" alt="Your Image">
+                    <h2>Номера на любой кошелек</h2>
+                    <p>Желаете сэкономить? На ваш выбор представлен огромный асортимент отелей, включая бюджетные, но достойные варианты.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-dark-gold">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="display-4 text-white">Есть что предложить?</h1>
+                <p class="lead text-white">Пройдите короткий опрос и оставьте фидбэк, который мы обязательно учтём!</p>
+            </div>
+            <div class="container mt-3">
+                <div class="row">
+                    <div class="col-4">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLScDhYpZZQZJ64q2WaKz9R0s-dIgxG1TYrWu-j7AcIPyRdYyEA/viewform?usp=sf_link" class="btn btn-dark-gold" type="button">Отзыв</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="px-4 pt-5 mt-3 text-center border-bottom">
+    <h1 class="display-4 fw-bold">Уже решились?</h1>
+    <div class="col-lg-8 mx-auto">
+        <p class="lead mb-4">Представьте себе, как вы просыпаетесь под пение птиц в уютном номере с панорамным видом на живописные горы. Вы неторопливо потягиваетесь, наслаждаясь первыми лучами солнца, и спускаетесь на завтрак в ресторан с изысканной кухней. После плотного завтрака вы отправляетесь исследовать окрестности, наслаждаясь свежим воздухом и красотой местного города. Всё сбудется, достаточно нажать на эти кнопки!</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+            <a type="button" th:href="@{/User-Admin-sort}" class="btn btn-primary btn-lg px-4 me-sm-3">Личный кабинет</a>
+            <a type="button" th:href="@{/all-rooms}" class="btn btn-outline-secondary btn-lg px-4">Выбор номера</a>
+        </div>
+    </div>
+    <div class="overflow-hidden" style="max-height: 30vh;">
+        <div class="container px-5">
+            <img src="https://www.windenergyhamburg.com/fileadmin/general/img/header/3840x1400/hamburg/hm_header-hh-hotel1.jpg" class="img-fluid border rounded-3 shadow-lg mb-4" alt="Example image" width="1000" height="500" style="max-width: 100%;" loading="lazy">
+        </div>
+    </div>
+</div>
+<div th:insert="~{parts/footer_macro :: footer}"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const cityButtons = document.querySelectorAll('.carousel-caption .btn-dark-gold');
+        const cityInput = document.getElementById('city');
+
+        cityButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                const city = this.getAttribute('data-city');
+                cityInput.value = city;
+                scrollToTop();
+            });
+        });
+    });
+
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>
+<script>
+    function validateForm() {
+        const city = document.getElementById('city').value;
+        const numberOfPeople = document.getElementById('numberOfPeople').value;
+        const checkinDate = document.getElementById('checkinDate').value;
+        const checkoutDate = document.getElementById('checkoutDate').value;
+
+        if (city.trim() === '') {
+            alert('Пожалуйста, введите город.');
+            return false;
+        }
+
+        if (numberOfPeople === '') {
+            alert('Пожалуйста, выберите количество человек.');
+            return false;
+        }
+
+        if (checkinDate === '') {
+            alert('Пожалуйста, выберите дату въезда.');
+            return false;
+        }
+
+        if (checkoutDate === '') {
+            alert('Пожалуйста, выберите дату выезда.');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+</body>
+</html>

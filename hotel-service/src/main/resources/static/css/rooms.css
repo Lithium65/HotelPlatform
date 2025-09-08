@@ -1,0 +1,89 @@
+        body {
+            background-image: url('https://r4.wallpaperflare.com/wallpaper/118/216/2/mountains-trees-moon-landscape-wallpaper-22d16260cdb65eeb3ae8c235c0f8a9e2.jpg');
+            background-size: cover;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: auto;
+            height: auto;
+            background-color: transparent;
+            border: none;
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            opacity: 0.9;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            display: none;
+        }
+
+        .bg-dark-gold {
+            background-color: #333;
+            color: #d4af37;
+        }
+
+        .btn-dark-gold {
+            background-color: #d4af37;
+            border-color: #d4af37;
+            color: #333;
+        }
+
+        .btn-dark-gold:hover {
+            background-color: #b39329;
+            border-color: #b39329;
+            color: #DAA520;
+        }
+
+        .navbar-brand {
+            font-size: 20px;
+        }
+
+        .card {
+            background-color: rgba(51, 51, 51, 0.8);
+            color: #fff;
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+
+        .room-image {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .room-list-container {
+            background-color: rgba(51, 51, 51, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+                .main-content {
+            flex-grow: 1;
+        }

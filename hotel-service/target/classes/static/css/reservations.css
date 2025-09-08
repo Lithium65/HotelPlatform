@@ -1,0 +1,56 @@
+ body {
+            background-image: url('https://r4.wallpaperflare.com/wallpaper/586/603/742/minimalism-4k-for-mac-desktop-wallpaper-08165d58e0100cf8e0ec214e88e2e4aa.jpg');
+            background-size: cover;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .btn-dark-gold {
+            background-color: #d4af37;
+            border-color: #d4af37;
+            color: #333;
+        }
+
+        .btn-dark-gold:hover {
+            background-color: #b39329;
+            border-color: #b39329;
+            color: #DAA520;
+        }
+
+        .navbar {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+
+        td[th\:if*="reservation.checkIn"] {
+            background-color: green;
+            color: white;
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        h1 {
+            text-shadow: 5px 5px 10px #333;
+        }

@@ -1,0 +1,44 @@
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: url('https://r4.wallpaperflare.com/wallpaper/531/951/621/digital-digital-art-artwork-illustration-minimalism-hd-wallpaper-08869d3810a06c28a09cf1be487204ea.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .btn-dark-gold {
+            background-color: #d4af37;
+            border-color: #d4af37;
+            color: #333;
+        }
+
+        .btn-dark-gold:hover {
+            background-color: #b39329;
+            border-color: #b39329;
+            color: #DAA520;
+        }
+
+        .navbar {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+
+        .main-content {
+            flex-grow: 1;
+        }
+
+        .hotel-name {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            font-size: 24px;
+        }

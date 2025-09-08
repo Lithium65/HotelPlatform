@@ -1,0 +1,46 @@
+body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: url('https://r4.wallpaperflare.com/wallpaper/118/216/2/mountains-trees-moon-landscape-wallpaper-22d16260cdb65eeb3ae8c235c0f8a9e2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .btn-dark-gold {
+            background-color: #d4af37;
+            border-color: #d4af37;
+            color: #333;
+        }
+
+        .btn-dark-gold:hover {
+            background-color: #b39329;
+            border-color: #b39329;
+            color: #DAA520;
+        }
+
+        .navbar {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+
+        .main-content {
+            flex-grow: 1;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-container h1 {
+            color: white;
+            margin: 0;
+        }

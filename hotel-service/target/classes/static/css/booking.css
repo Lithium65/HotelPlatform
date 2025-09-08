@@ -1,0 +1,19 @@
+        .btn-dark-gold {
+            background-color: #d4af37;
+            border-color: #d4af37;
+            color: #333;
+        }
+
+        .btn-dark-gold:hover {
+            background-color: #b39329;
+            border-color: #b39329;
+            color: #DAA520;
+        }
+
+        .navbar {
+            background-color: #000;
+            color: #fff;
+        }
+                .main-content {
+            flex-grow: 1;
+        }

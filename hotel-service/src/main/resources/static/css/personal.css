@@ -1,0 +1,49 @@
+
+        body {
+     background-image: url('https://images.nplod.ru/gen_images_3/znzwP8GK97wEyWMUv6AOAHlQFy9ejzwj.jpg');
+     background-size: cover;
+     color: #333;
+     display: flex;
+     flex-direction: column;
+     min-height: 100vh;
+
+ }
+
+ .btn-dark-gold {
+     background-color: #d4af37;
+     border-color: #d4af37;
+     color: #333;
+ }
+
+ .btn-dark-gold:hover {
+     background-color: #b39329;
+     border-color: #b39329;
+     color: #DAA520;
+ }
+
+         .navbar {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .navbar-brand, .nav-link {
+        color: #fff !important;
+    }
+
+
+ table {
+     border-collapse: collapse;
+     border-spacing: 0;
+ }
+
+ th {
+     background-color: #f0f0f0;
+     border: 1px solid #ddd;
+     padding: 10px;
+     text-align: left;
+ }
+
+ td {
+     border: 1px solid #ddd;
+     padding: 10px;
+ }

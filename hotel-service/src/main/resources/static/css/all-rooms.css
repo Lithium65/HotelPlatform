@@ -1,0 +1,86 @@
+ body {
+            background-image: url('https://static.vecteezy.com/system/resources/previews/030/658/258/large_2x/downtempo-chillout-minimalist-desktop-wallpaper-free-photo.jpg');
+            background-size: cover;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: auto;
+            height: auto;
+            background-color: transparent;
+            border: none;
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-form-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            opacity: 0.9;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            display: none;
+        }
+
+        .btn-dark-gold {
+            background-color: #d4af37;
+            border-color: #d4af37;
+            color: #333;
+        }
+
+        .btn-dark-gold:hover {
+            background-color: #b39329;
+            border-color: #b39329;
+            color: #DAA520;
+        }
+
+        .navbar-brand {
+            font-size: 20px;
+        }
+
+        .card {
+            background-color: rgba(51, 51, 51, 0.8);
+            color: #fff;
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+
+        .room-image {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .room-list-container {
+            background-color: rgba(51, 51, 51, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }

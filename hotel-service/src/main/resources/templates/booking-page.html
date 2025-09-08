@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+    <meta charset="UTF-8">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="/static/css/booking.css">
+</head>
+<body>
+<div class="form-container">
+    <div th:insert="~{parts/navbar_macro :: navbar}"></div>
+    <div class="col-md-7 col-lg-8 mx-auto form-container">
+
+        <h4 class="mb-3">Оформление заказа</h4>
+        <form th:action="@{/reserve}" method="post" class="needs-validation" novalidate="">
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">Имя:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Введите имя"
+                               minlength="2" required>
+                        <div class="invalid-feedback">Имя должно содержать минимум 2 символа.</div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Фамилия:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName"
+                               placeholder="Введите фамилию" minlength="1" required>
+                        <div class="invalid-feedback">Фамилия должна содержать минимум 1 символ.</div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label for="phNumber" class="form-label">Номер пользователя:</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="validationTooltipUsernamePrepend">+</span>
+                        <input type="text" class="form-control" id="phNumber" name="phNumber"
+                               placeholder="Введите номер пользователя" pattern="[0-9]{1,12}" required>
+                    </div>
+                    <div class="invalid-feedback">Номер пользователя должен содержать только цифры (максимум 12).</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Страна проживания:</label>
+                        <select class="form-select" id="country" name="country" required>
+                            <option value="">Выберите страну</option>
+                            <option value="США">США</option>
+                            <option value="Великобритания">Великобритания</option>
+                            <option value="Беларусь">Беларусь</option>
+                            <option value="Франция">Франция</option>
+                            <option value="Россия">Россия</option>
+                            <option value="">Другое</option>
+                        </select>
+                    </div>
+                    <div id="otherCountryForm" style="display: none;">
+                        <div class="mb-3">
+                            <label for="otherCountry" class="form-label">Введите страну:</label>
+                            <input type="text" class="form-control" id="otherCountry" name="otherCountry" placeholder="Введите страну">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="mb-3">
+                        <label for="roomTypeId">Тип комнаты:</label>
+                        <select class="form-select" id="roomTypeId" name="roomTypeId" aria-label="Default select example" disabled>
+                            <option th:value="${roomType.typeId}" th:text="${roomType.name} + ' - ' + ${roomType.price} + ' $/сут. '" selected></option>
+                        </select>
+                        <input type="hidden" name="roomTypeId" th:value="${roomType.typeId}" />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label for="checkIn">Check-in Date:</label>
+                    <input type="date" id="checkIn" name="checkIn" required>
+                    <div class="invalid-feedback">Пожалуйста, выберите дату заезда.</div>
+                    <label for="checkOut">Check-out Date:</label>
+                    <input type="date" id="checkOut" name="checkOut" required>
+                    <div class="invalid-feedback">Пожалуйста, выберите дату выезда.</div>
+                    <span id="numNights"></span>
+                </div>
+                <div class="mb-5">
+                    <hr class="my-4">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button class="w-100 btn btn-primary btn-lg" onclick="confirmAction()" type="submit">Забронировать</button>
+                </div>
+                <div class="mb-5">
+                    <a th:href="@{/room/{id}(id=${roomType.typeId})}" class="btn d-block">Назад</a>
+                </div>
+            </div>
+        </form>
+        <div th:if="${errorMessage}" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Нет свободных номеров</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p th:text="${errorMessage}"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="~{parts/footer_macro :: footer}"></div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        if ($('.modal').length) {
+            $('.modal').modal('show');
+        }
+    });
+</script>
+<script>
+    function confirmAction() {
+      confirm("Вы уверены, что хотите забронировать номер?");
+   }
+</script>
+<script>
+    $(document).ready(function() {
+        $('#country').on('change', function() {
+            if ($('#country option:selected').val() === '') {
+                $('#otherCountryForm').show();
+            } else {
+                $('#otherCountryForm').hide();
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#checkIn, #checkOut').on('change', function() {
+            calculateNumNights();
+        });
+    });
+
+    function calculateNumNights() {
+        var checkInDate = new Date($('#checkIn').val());
+        var checkOutDate = new Date($('#checkOut').val());
+
+        if (checkInDate && checkOutDate) {
+            var numNights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+            $('#numNights').text(numNights + ' ночей');
+        } else {
+            $('#numNights').text('');
+        }
+    }
+</script>
+</body>
+</html>
