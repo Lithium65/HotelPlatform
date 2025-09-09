@@ -1,13 +1,9 @@
 package com.example.hotelservice.controller;
 
 import com.example.hotelservice.domain.*;
-import com.example.hotelservice.repos.HotelRepo;
-import com.example.hotelservice.repos.RoomRepo;
 import com.example.hotelservice.services.*;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,10 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Controller
 public class MainController {
@@ -93,15 +86,16 @@ public class MainController {
     @PostMapping("/main/hotels/{hotelId}/room-types/{roomId}/room-delete")
     public String roomDelete(@PathVariable(value = "hotelId") Long hotelId, @PathVariable(value = "roomId") Long id, Model model) {
 
-        Room room = roomService.findById(id).orElseThrow();
-        List<Reservation> reservation = reservationService.findByRoom(roomService.findById(id));
+        Optional<Room> room = roomService.findById(id);
+        if (room.isPresent()) {
+            List<Reservation> reservation = reservationService.findByRoom(room.get());
 
-        if(reservation != null && !reservation.isEmpty())
-        {
-            return ("redirect:/main/" + hotelId + "/room-types");
+            if (reservation != null && !reservation.isEmpty()) {
+                return ("redirect:/main/" + hotelId + "/room-types");
+            }
+
+            roomService.delete(room.get());
         }
-
-        roomService.delete(room);
         return ("redirect:/main/hotels/" + hotelId + "/room-types/add-rooms");
     }
 

@@ -1,9 +1,7 @@
 package com.example.hotelservice.controller;
 
 import com.example.hotelservice.domain.Role;
-import com.example.hotelservice.domain.RoomType;
 import com.example.hotelservice.domain.User;
-import com.example.hotelservice.repos.UserRepo;
 import com.example.hotelservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

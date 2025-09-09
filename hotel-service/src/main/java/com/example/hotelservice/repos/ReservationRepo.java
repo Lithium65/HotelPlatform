@@ -15,12 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReservationRepo extends CrudRepository<Reservation, Long> {
-    @Query("SELECT r.room.id FROM Reservation r WHERE r.checkIn <= :endDate AND r.checkOut >= :startDate")
-    List<Long> findReservedRoomIdsByDates(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
-
-    @Query("SELECT r FROM Reservation r JOIN FETCH r.room ro JOIN FETCH ro.roomType rt JOIN FETCH rt.hotel h")
-    List<Reservation> findAllWithHotel();
-
     @Query("SELECT r FROM Reservation r JOIN FETCH r.room ro JOIN FETCH ro.roomType rt JOIN FETCH rt.hotel h WHERE h.hotelName LIKE %:hotelName%")
     Page<Reservation> findByHotelName(@Param("hotelName") String hotelName, Pageable pageable);
 
@@ -28,7 +22,7 @@ public interface ReservationRepo extends CrudRepository<Reservation, Long> {
 
     Iterable<Reservation> findByUser(User user);
 
-    List<Reservation> findByRoom(Optional<Room> room);
+    List<Reservation> findByRoom(Room room);
 
     List<Reservation> findByRoomRoomType(RoomType filter);
 

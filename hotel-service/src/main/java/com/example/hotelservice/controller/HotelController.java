@@ -1,11 +1,7 @@
 package com.example.hotelservice.controller;
 
 import com.example.hotelservice.domain.Hotel;
-import com.example.hotelservice.domain.Reservation;
-import com.example.hotelservice.domain.Room;
-import com.example.hotelservice.domain.RoomType;
 import com.example.hotelservice.services.HotelService;
-import com.example.hotelservice.services.RoomService;
 import com.example.hotelservice.services.RoomTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,9 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Controller
