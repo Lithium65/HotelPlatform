@@ -117,7 +117,6 @@ public class MainController {
         model.addAttribute("reservations", reservationPage.getContent());
         model.addAttribute("page", reservationPage);
         model.addAttribute("hotelName", hotelName != null ? hotelName : "");
-        //model.addAttribute("hotelName", hotelName);
         return "reservations";
     }
 
@@ -143,7 +142,7 @@ public class MainController {
     }
 
     @PostMapping("/main/{id}/reservation-delete")
-    public String reservationDelete(@PathVariable(value = "id") Long id, @AuthenticationPrincipal User user, Model model) {
+    public String reservationDelete(@PathVariable(value = "id") Long id, @AuthenticationPrincipal User user) {
         if(user.getRoles().contains(Role.ADMIN) ||
                 Objects.equals(reservationService.getReservationById(id).get().getUser().getId(), user.getId()))
             reservationService.deleteReservation(id);

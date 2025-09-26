@@ -3,6 +3,7 @@ package com.example.hotelservice.controller;
 import com.example.hotelservice.domain.Hotel;
 import com.example.hotelservice.services.HotelService;
 import com.example.hotelservice.services.RoomTypeService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -70,7 +71,6 @@ public class HotelController {
 
     @PostMapping("/{id}/delete")
     public String hotelDelete(@PathVariable(value="id") Long id, Model model){
-        Hotel hotel = hotelService.getHotelById(id);
         roomTypeService.deleteHotelRoomTypes(id);
 
         hotelService.deleteHotel(id);
@@ -109,10 +109,14 @@ public class HotelController {
 
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Hotel hotel = hotelService.getHotelById(id);
+        try {
+            Hotel hotel = hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException("Hotel not found"));
         model.addAttribute("hotel.id", hotel.getId());
         model.addAttribute("hotel", hotel);
         return "hotel-edit-form";
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/{id}/edit")
@@ -120,7 +124,8 @@ public class HotelController {
         if (bindingResult.hasErrors()) {
             return "editHotel";
         }
-        Hotel existingHotel = hotelService.getHotelById(id);
+        try {
+            Hotel existingHotel = hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException("Hotel not found"));
         if (file1 != null && !file1.isEmpty()) {
             String uuidFile1 = UUID.randomUUID().toString();
             String resultFilename1 = uuidFile1 + '.' + file1.getOriginalFilename();
@@ -142,5 +147,8 @@ public class HotelController {
         }
         hotelService.updateHotel(hotel);
         return "redirect:/main/hotels";
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

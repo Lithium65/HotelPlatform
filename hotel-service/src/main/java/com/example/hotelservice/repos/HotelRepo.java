@@ -8,10 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HotelRepo extends JpaRepository<Hotel, Long> {
     @Query("SELECT h FROM Hotel h WHERE h.id = :hotelId")
-    Hotel getHotelById(@Param("hotelId") Long hotelId);
+    Optional<Hotel> getHotelById(@Param("hotelId") Long hotelId);
 
     Page<Hotel> findByCountry(String country, Pageable pageable);
 }

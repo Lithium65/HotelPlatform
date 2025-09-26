@@ -4,6 +4,7 @@ import com.example.hotelservice.domain.RoomType;
 import com.example.hotelservice.services.HotelService;
 import com.example.hotelservice.services.RoomTypeService;
 import jakarta.validation.Valid;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -54,7 +55,7 @@ public class RoomTypeController {
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<RoomType> roomTypesPage = roomTypeService.getHotelRoomTypes(id, pageable);
 
-        model.addAttribute("hotelName", hotelService.getHotelById(id).getHotelName());
+        model.addAttribute("hotelName", hotelService.getHotelById(id).get().getHotelName());
         model.addAttribute("roomTypes", roomTypesPage.getContent());
         model.addAttribute("hotelId", id);
         model.addAttribute("currentPage", roomTypesPage.getNumber());
@@ -117,7 +118,11 @@ public class RoomTypeController {
         }
 
         else return "redirect:/main/hotels/" + hotelId + "/room-types/create";
-        roomType.setHotel(hotelService.getHotelById(hotelId));
+        try {
+            roomType.setHotel(hotelService.getHotelById(hotelId).orElseThrow(() -> new NotFoundException("Hotel not found")));
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
         roomTypeService.createRoomType(roomType);
         return "redirect:/main/hotels/" + hotelId + "/room-types";
     }
@@ -179,7 +184,11 @@ public class RoomTypeController {
             roomType.setFilename3(existingRoomType.getFilename3());
         }
         roomType.setId(roomId);
-        roomType.setHotel(hotelService.getHotelById(id));
+        try {
+            roomType.setHotel(hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException("Hotel not found")));
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
         roomTypeService.updateRoomType(roomType);
         return "redirect:/main/hotels/" + id + "/room-types";
     }

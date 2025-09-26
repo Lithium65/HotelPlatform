@@ -1,7 +1,9 @@
 package com.example.hotelservice.controller;
 
+import com.example.hotelservice.domain.Hotel;
 import com.example.hotelservice.domain.Role;
 import com.example.hotelservice.domain.User;
+import com.example.hotelservice.services.HotelService;
 import com.example.hotelservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Controller
@@ -24,6 +27,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HotelService hotelService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
@@ -57,28 +63,29 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model){
+    public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         model.addAttribute("userRoles", user.getRoles());
+
+        List<Hotel> hotels = hotelService.findAll();
+        model.addAttribute("hotels", hotels);
+
+        Hotel userManagedHotel = null;
+        if (user.getManagedHotel() != null) {
+            userManagedHotel = user.getManagedHotel();
+        }
+        model.addAttribute("userManagedHotel", userManagedHotel);
+
         return "user_edit";
     }
 
     @PostMapping("{user}")
-    public String userSave(@PathVariable User user, @RequestParam String username, @RequestParam(required = false) List<String> roles) {
-        user.setUsername(username);
-
-        if (roles != null) {
-            Set<Role> userRoles = new HashSet<>();
-            for (String role : roles) {
-                userRoles.add(Role.valueOf(role));
-            }
-            user.setRoles(userRoles);
-        } else {
-            user.setRoles(new HashSet<>());
-        }
-
-        userService.save(user);
+    public String userSave(@PathVariable User user,
+                           @RequestParam String username,
+                           @RequestParam(required = false) List<String> roles,
+                           @RequestParam(required = false) Long hotelId) {
+        userService.updateUser(user.getId(), username, roles, hotelId);
         return "redirect:/main/user";
     }
 

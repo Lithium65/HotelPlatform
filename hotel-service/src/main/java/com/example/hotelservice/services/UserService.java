@@ -22,4 +22,6 @@ public interface UserService extends UserDetailsService {
     Page<User> findByUsernameContaining(String username, Pageable pageable);
 
     User findByUsername(String username);
+
+    void updateUser(Long id, String username, List<String> roles, Long hotelId);
 }

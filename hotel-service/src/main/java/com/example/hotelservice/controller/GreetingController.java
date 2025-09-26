@@ -3,6 +3,7 @@ package com.example.hotelservice.controller;
 import com.example.hotelservice.domain.*;
 import com.example.hotelservice.services.*;
 import jakarta.servlet.http.HttpSession;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,15 +47,22 @@ public class GreetingController {
 
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
+//        Set<Role> role = new HashSet<>();
+//        role.add(Role.ADMIN);
+//        userService.save(new User(0L, "admin", "$2a$08$7ES8xYd44qKQ1YMdGwk.SO2XNvv/ue1Vixs5Z27OpAZocvyrF/eaq", true, null, null, role));
         return "greeting";
     }
 
     @GetMapping("/room/{id}")
     public String getRoomDetails(@PathVariable Long id, Model model) {
         RoomType roomType = roomTypeService.getRoomTypeById(id);
-        Hotel hotel = hotelService.getHotelById(roomType.getHotel().getId());
+        try {
+            Hotel hotel = hotelService.getHotelById(roomType.getHotel().getId()).orElseThrow(() -> new NotFoundException("Hotel not found"));
+            model.addAttribute("hotel", hotel);
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
         model.addAttribute("roomType", roomType);
-        model.addAttribute("hotel", hotel);
         return "room-details";
     }
 
@@ -137,8 +145,7 @@ public class GreetingController {
             @RequestParam("checkinDate") LocalDate checkinDate,
             @RequestParam("checkoutDate") LocalDate checkoutDate,
             @RequestParam(defaultValue = "false") boolean baby,
-            HttpSession session,
-            Model model) {
+            HttpSession session) {
         List<RoomType> roomTypes = roomTypeService.getAvailableRooms(city, numberOfPeople, baby, checkinDate, checkoutDate);
         session.setAttribute("roomTypes", roomTypes);
         return "redirect:/rooms";
