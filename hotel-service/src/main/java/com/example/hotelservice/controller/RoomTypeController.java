@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Controller
 @PreAuthorize("hasAuthority('ADMIN')")
-@RequestMapping("/main/hotels")
+@RequestMapping("/admin/hotels")
 public class RoomTypeController {
 
     @Autowired
@@ -117,21 +117,21 @@ public class RoomTypeController {
             roomType.setFilename3(resultFilename3);
         }
 
-        else return "redirect:/main/hotels/" + hotelId + "/room-types/create";
+        else return "redirect:/admin/hotels/" + hotelId + "/room-types/create";
         try {
             roomType.setHotel(hotelService.getHotelById(hotelId).orElseThrow(() -> new NotFoundException("Hotel not found")));
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
         roomTypeService.createRoomType(roomType);
-        return "redirect:/main/hotels/" + hotelId + "/room-types";
+        return "redirect:/admin/hotels/" + hotelId + "/room-types";
     }
 
     @PostMapping("/{id}/room-types/{roomId}/room-type-delete")
     public String roomTypeDelete(@PathVariable(value="roomId") Long roomId, @PathVariable(value="id") Long id, Model model){
         RoomType roomType = roomTypeService.getRoomTypeById(roomId);
         roomTypeService.deleteRoomType(roomId);
-        return ("redirect:/main/hotels/" + id + "/room-types");
+        return ("redirect:/admin/hotels/" + id + "/room-types");
     }
 
     @GetMapping("/{id}/room-types/{roomId}/edit")
@@ -190,7 +190,7 @@ public class RoomTypeController {
             throw new RuntimeException(e);
         }
         roomTypeService.updateRoomType(roomType);
-        return "redirect:/main/hotels/" + id + "/room-types";
+        return "redirect:/admin/hotels/" + id + "/room-types";
     }
 
 }

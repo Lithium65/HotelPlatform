@@ -46,7 +46,7 @@ public class GreetingController {
     }
 
     @GetMapping("/")
-    public String greeting(Map<String, Object> model) {
+    public String greeting() {
 //        Set<Role> role = new HashSet<>();
 //        role.add(Role.ADMIN);
 //        userService.save(new User(0L, "admin", "$2a$08$7ES8xYd44qKQ1YMdGwk.SO2XNvv/ue1Vixs5Z27OpAZocvyrF/eaq", true, null, null, role));
@@ -69,7 +69,7 @@ public class GreetingController {
     @GetMapping("/User-Admin-sort")
     public String redirect(@AuthenticationPrincipal User user) {
         if (user.getRoles().contains(Role.ADMIN)) {
-            return "redirect:/main/reservations";
+            return "redirect:/admin/reservations";
         } else {
             return "redirect:/personal";
         }

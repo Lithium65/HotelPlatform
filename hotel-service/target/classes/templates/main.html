@@ -19,7 +19,7 @@
 <div th:insert="~{/parts/dark_navbar_macro :: dark_navbar}"></div>
 <div class="container mt-5 main-content">
     <div class="card p-4">
-        <form method="post" enctype="multipart/form-data" th:action="@{/main/hotels/{id}/room-types/add-rooms(id=${id})}">
+        <form method="post" enctype="multipart/form-data" th:action="@{/admin/hotels/{id}/room-types/add-rooms(id=${id})}">
             <div class="row">
                 <div class="mb-2 d-flex justify-content-center">
                     <h2>Добавление номеров</h2>
@@ -40,7 +40,7 @@
                 <button class="btn btn-success" type="submit">Добавить</button>
             </div>
             <div class="mb-3">
-                <a th:href="@{/main/hotels/{id}/room-types(id=${id})}" class="btn d-block">Назад</a>
+                <a th:href="@{/admin/hotels/{id}/room-types(id=${id})}" class="btn d-block">Назад</a>
             </div>
         </form>
         <hr>
@@ -48,7 +48,7 @@
             [[${errorMessage}]]
         </div>
         <div>Список комнат</div>
-        <form method="get" th:action="@{/main/hotels/{id}/room-types/add-rooms(id=${id})}" class="mb-3">
+        <form method="get" th:action="@{/admin/hotels/{id}/room-types/add-rooms(id=${id})}" class="mb-3">
             <div class="input-group">
                 <select class="form-select" id="filter" name="filter" aria-label="">
                     <option selected value="">Выберите тип комнаты</option>
@@ -72,7 +72,7 @@
                 <td th:text="${room.number}"></td>
                 <td th:text="${room.getRoomTypeName()}"></td>
                 <td>
-                    <form th:action="@{/main/hotels/{hotelId}/room-types/{id}/room-delete(id=${room.roomId}, hotelId=${id})}" method="post">
+                    <form th:action="@{/admin/hotels/{hotelId}/room-types/{id}/room-delete(id=${room.roomId}, hotelId=${id})}" method="post">
                         <button class="btn btn-danger" onclick="return confirmAction()" type="submit">Удалить</button>
                     </form>
                 </td>

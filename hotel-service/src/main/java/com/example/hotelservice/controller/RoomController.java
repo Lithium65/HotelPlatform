@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.*;
 
 @Controller
-public class MainController {
+public class RoomController {
 
     @Autowired
     private final RoomService roomService;
@@ -29,15 +29,15 @@ public class MainController {
     @Autowired
     private final RoomTypeService roomTypeService;
 
-    public MainController(RoomService roomService, ReservationService reservationService, RoomTypeService roomTypeService) {
+    public RoomController(RoomService roomService, ReservationService reservationService, RoomTypeService roomTypeService) {
         this.roomService = roomService;
         this.reservationService = reservationService;
         this.roomTypeService = roomTypeService;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/main/hotels/{id}/room-types/add-rooms")
-    public String main(@PathVariable(value = "id") Long id,
+    @GetMapping("/admin/hotels/{id}/room-types/add-rooms")
+    public String room(@PathVariable(value = "id") Long id,
                        @RequestParam(required = false, defaultValue = "") RoomType filter,
                        Model model) {
 
@@ -57,7 +57,7 @@ public class MainController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/main/hotels/{id}/room-types/add-rooms")
+    @PostMapping("/admin/hotels/{id}/room-types/add-rooms")
     public String add(
             @AuthenticationPrincipal User user,
             @RequestParam int number,
@@ -66,7 +66,7 @@ public class MainController {
             Model model) {
 
         if(roomTypeId == null) {
-            return "redirect:/main/hotels/" + id + "/room-types/add-rooms";
+            return "redirect:/admin/hotels/" + id + "/room-types/add-rooms";
         }
 
         RoomType roomType = roomTypeService.getRoomTypeById(roomTypeId);
@@ -75,15 +75,15 @@ public class MainController {
 
         if(room_check) {
             model.addAttribute("errorMessage", "Комната с таким номером уже существует!");
-            return main(id, null, model); // Вызываем метод main для заполнения модели данными
+            return room(id, null, model); // Вызываем метод main для заполнения модели данными
         }
 
         roomService.save(room);
-        return "redirect:/main/hotels/" + id + "/room-types/add-rooms";
+        return "redirect:/admin/hotels/" + id + "/room-types/add-rooms";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/main/hotels/{hotelId}/room-types/{roomId}/room-delete")
+    @PostMapping("/admin/hotels/{hotelId}/room-types/{roomId}/room-delete")
     public String roomDelete(@PathVariable(value = "hotelId") Long hotelId, @PathVariable(value = "roomId") Long id, Model model) {
 
         Optional<Room> room = roomService.findById(id);
@@ -91,16 +91,16 @@ public class MainController {
             List<Reservation> reservation = reservationService.findByRoom(room.get());
 
             if (reservation != null && !reservation.isEmpty()) {
-                return ("redirect:/main/" + hotelId + "/room-types");
+                return ("redirect:/admin/" + hotelId + "/room-types");
             }
 
             roomService.delete(room.get());
         }
-        return ("redirect:/main/hotels/" + hotelId + "/room-types/add-rooms");
+        return ("redirect:/admin/hotels/" + hotelId + "/room-types/add-rooms");
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/main/reservations")
+    @GetMapping("/admin/reservations")
     public String getReservations(@RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int size,
                                   @RequestParam(required = false) String hotelName,
@@ -121,7 +121,7 @@ public class MainController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/main/reservations")
+    @PostMapping("/admin/reservations")
     public String search(Model model,@RequestParam(required = false, defaultValue = "")
     Long filter) {
 
@@ -141,7 +141,7 @@ public class MainController {
         return "reservations";
     }
 
-    @PostMapping("/main/{id}/reservation-delete")
+    @PostMapping("/admin/{id}/reservation-delete")
     public String reservationDelete(@PathVariable(value = "id") Long id, @AuthenticationPrincipal User user) {
         if(user.getRoles().contains(Role.ADMIN) ||
                 Objects.equals(reservationService.getReservationById(id).get().getUser().getId(), user.getId()))
@@ -149,7 +149,7 @@ public class MainController {
 
         if(user.getRoles().contains(Role.USER))
             return ("redirect:/personal");
-        else return ("redirect:/main/reservations");
+        else return ("redirect:/admin/reservations");
     }
 
 }

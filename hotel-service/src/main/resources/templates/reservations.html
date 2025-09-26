@@ -13,7 +13,7 @@
     <div class="d-flex justify-content-center">
         <h1 class="mb-5 text-white">Бронирования</h1>
     </div>
-    <form class="mb-3" method="get" th:action="@{/main/reservations}">
+    <form class="mb-3" method="get" th:action="@{/admin/reservations}">
         <div class="input-group">
             <input type="text" class="form-control" name="hotelName" th:value="${hotelName}" placeholder="Поиск по названию отеля">
             <button class="btn btn-dark-gold" type="submit">Поиск</button>
@@ -47,7 +47,7 @@
             <td th:text="${reservation.lastName}"></td>
             <td th:text="${reservation.country}"></td>
             <td>
-                <form th:action="@{'/main/' + ${reservation.id} + '/reservation-delete'}" method="post">
+                <form th:action="@{'/admin/' + ${reservation.id} + '/reservation-delete'}" method="post">
                     <button class="btn btn-danger" onclick="confirmAction()" type="submit">Удалить</button>
                 </form>
             </td>
@@ -59,14 +59,14 @@
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${page.number == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/main/reservations(page=${page.number - 1}, size=${page.size}, hotelName=${hotelName})}" tabindex="-1">Предыдущая</a>
+                    <a class="page-link" th:href="@{/admin/reservations(page=${page.number - 1}, size=${page.size}, hotelName=${hotelName})}" tabindex="-1">Предыдущая</a>
                 </li>
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
                     th:classappend="${i == page.number} ? 'active'">
-                    <a class="page-link" th:href="@{/main/reservations(page=${i}, size=${page.size}, hotelName=${hotelName})}" th:text="${i + 1}"></a>
+                    <a class="page-link" th:href="@{/admin/reservations(page=${i}, size=${page.size}, hotelName=${hotelName})}" th:text="${i + 1}"></a>
                 </li>
                 <li class="page-item" th:classappend="${page.number == page.totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/main/reservations(page=${page.number + 1}, size=${page.size}, hotelName=${hotelName})}">Следующая</a>
+                    <a class="page-link" th:href="@{/admin/reservations(page=${page.number + 1}, size=${page.size}, hotelName=${hotelName})}">Следующая</a>
                 </li>
             </ul>
         </nav>

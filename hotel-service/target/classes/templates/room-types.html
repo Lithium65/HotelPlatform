@@ -42,9 +42,9 @@
 <div class="container mt-5 main-content">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="text-white">Управление типами комнат</h1>
-        <a class="btn btn-dark" th:href="@{/main/hotels/{id}/room-types/create(id=${hotelId})}">Создать новый тип комнаты</a>
-        <a class="btn btn-dark" th:href="@{/main/hotels/{id}/room-types/add-rooms(id=${hotelId})}">Добавление номеров</a>
-        <a th:href="@{/main/hotels}" class="btn btn-light">Назад к списку отелей</a>
+        <a class="btn btn-dark" th:href="@{/admin/hotels/{id}/room-types/create(id=${hotelId})}">Создать новый тип комнаты</a>
+        <a class="btn btn-dark" th:href="@{/admin/hotels/{id}/room-types/add-rooms(id=${hotelId})}">Добавление номеров</a>
+        <a th:href="@{/admin/hotels}" class="btn btn-light">Назад к списку отелей</a>
     </div>
 
     <table class="table">
@@ -52,7 +52,7 @@
         <tr>
             <th>
                 Название
-                <a th:href="@{'/main/hotels/' + ${hotelId} + '/room-types?page=' + ${currentPage} + '&sortBy=name&sortOrder=' + ${sortOrder == 'asc' ? 'desc' : 'asc'}}">
+                <a th:href="@{'/admin/hotels/' + ${hotelId} + '/room-types?page=' + ${currentPage} + '&sortBy=name&sortOrder=' + ${sortOrder == 'asc' ? 'desc' : 'asc'}}">
                     <span th:if="${sortBy == 'name' && sortOrder == 'asc'}">&#9650;</span>
                     <span th:if="${sortBy == 'name' && sortOrder == 'desc'}">&#9660;</span>
                 </a>
@@ -69,10 +69,10 @@
             <td th:text="${roomType.price}"></td>
             <td>
                 <div style="display: flex; gap: 10px;">
-                    <form th:action="@{/main/hotels/{hotelId}/room-types/{id}/edit(hotelId=${hotelId}, id=${roomType.id})}">
+                    <form th:action="@{/admin/hotels/{hotelId}/room-types/{id}/edit(hotelId=${hotelId}, id=${roomType.id})}">
                         <button type="submit" class="btn btn-primary">Редактировать</button>
                     </form>
-                    <form th:action="@{/main/hotels/{hotelId}/room-types/{id}/room-type-delete(id=${roomType.id}, hotelId=${hotelId})}" method="post">
+                    <form th:action="@{/admin/hotels/{hotelId}/room-types/{id}/room-type-delete(id=${roomType.id}, hotelId=${hotelId})}" method="post">
                         <button type="submit" onclick="return confirmAction()" class="btn btn-danger">Удалить</button>
                     </form>
                 </div>
@@ -83,16 +83,16 @@
     <nav aria-label="Page navigation" th:if="${totalPages > 0}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{'/main/hotels/' + ${hotelId} + '/room-types?page=' + ${currentPage - 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder}}" aria-label="Previous">
+                <a class="page-link" th:href="@{'/admin/hotels/' + ${hotelId} + '/room-types?page=' + ${currentPage - 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder}}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                 th:classappend="${i == currentPage} ? 'active'">
-                <a class="page-link" th:href="@{'/main/hotels/' + ${hotelId} + '/room-types?page=' + ${i} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder}}" th:text="${i + 1}"></a>
+                <a class="page-link" th:href="@{'/admin/hotels/' + ${hotelId} + '/room-types?page=' + ${i} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder}}" th:text="${i + 1}"></a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{'/main/hotels/' + ${hotelId} + '/room-types?page=' + ${currentPage + 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder}}" aria-label="Next">
+                <a class="page-link" th:href="@{'/admin/hotels/' + ${hotelId} + '/room-types?page=' + ${currentPage + 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder}}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

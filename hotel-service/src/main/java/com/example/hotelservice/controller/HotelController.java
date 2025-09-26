@@ -24,7 +24,7 @@ import java.util.UUID;
 
 @Controller
 @PreAuthorize("hasAuthority('ADMIN')")
-@RequestMapping("/main/hotels")
+@RequestMapping("/admin/hotels")
 public class HotelController {
 
     @Autowired
@@ -74,7 +74,7 @@ public class HotelController {
         roomTypeService.deleteHotelRoomTypes(id);
 
         hotelService.deleteHotel(id);
-        return "redirect:/main/hotels";
+        return "redirect:/admin/hotels";
     }
 
     @GetMapping("/create")
@@ -102,9 +102,9 @@ public class HotelController {
             hotel.setFilename1(resultFilename1);
         }
 
-        else return "redirect:/main/hotels/create";
+        else return "redirect:/admin/hotels/create";
         hotelService.createHotel(hotel);
-        return "redirect:/main/hotels";
+        return "redirect:/admin/hotels";
     }
 
     @GetMapping("/{id}/edit")
@@ -146,7 +146,7 @@ public class HotelController {
             hotel.setFilename1(existingHotel.getFilename1());
         }
         hotelService.updateHotel(hotel);
-        return "redirect:/main/hotels";
+        return "redirect:/admin/hotels";
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }

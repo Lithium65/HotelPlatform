@@ -11,7 +11,7 @@
 <div th:insert="~{/parts/dark_navbar_macro :: dark_navbar}"></div>
 <div class="my-5 container">
     <h1 class="text-center">Обновление типа комнаты</h1>
-    <form th:action="@{/main/hotels/{id}/room-types/{roomId}/edit(id=${hotelId}, roomId=${roomType.id})}"
+    <form th:action="@{/admin/hotels/{id}/room-types/{roomId}/edit(id=${hotelId}, roomId=${roomType.id})}"
           enctype="multipart/form-data"
           th:object="${roomType}"
           method="post"
@@ -58,7 +58,7 @@
     </form>
     <div class="row">
         <div class="mt-3 d-flex justify-content-center">
-            <a th:href="@{/main/hotels/{id}/room-types(id=${hotelId})}" class="btn btn-secondary">Назад к списку типов комнат</a>
+            <a th:href="@{/admin/hotels/{id}/room-types(id=${hotelId})}" class="btn btn-secondary">Назад к списку типов комнат</a>
         </div>
     </div>
 </div>

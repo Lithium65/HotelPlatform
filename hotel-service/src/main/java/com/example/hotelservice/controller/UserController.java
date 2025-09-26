@@ -22,7 +22,7 @@ import java.util.Set;
 
 @Controller
 @PreAuthorize("hasAuthority('ADMIN')")
-@RequestMapping("/main/user")
+@RequestMapping("/admin/user")
 public class UserController {
 
     @Autowired
@@ -86,7 +86,7 @@ public class UserController {
                            @RequestParam(required = false) List<String> roles,
                            @RequestParam(required = false) Long hotelId) {
         userService.updateUser(user.getId(), username, roles, hotelId);
-        return "redirect:/main/user";
+        return "redirect:/admin/user";
     }
 
 
