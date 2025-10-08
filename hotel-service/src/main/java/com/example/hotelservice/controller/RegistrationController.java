@@ -20,14 +20,17 @@ public class RegistrationController {
     private UserService userService;
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @GetMapping("/registration")
-    public String registration(){
+    public String registration() {
         return "registration";
     }
+
     @GetMapping("/login")
     public String login() {
         return "login";
     }
+
     @PostMapping("/registration")
     public String addUser(User user, Model model, @RequestParam("confirmPassword") String confirmPassword, BindingResult bindingResult) {
         if (!user.getPassword().equals(confirmPassword)) {
@@ -37,8 +40,12 @@ public class RegistrationController {
             model.addAttribute("errorMessage", "Пароли не совпадают!");
             return "registration";
         }
+        if (confirmPassword.length() < 4) {
+            model.addAttribute("errorMessage", "Пароль короче 4 символов!");
+            return "registration";
+        }
         User check_user = userService.findByUsername(user.getUsername());
-        if (check_user != null ) {
+        if (check_user != null) {
             model.addAttribute("errorMessage", "Данный пользователь уже занят!");
             return "registration";
         }

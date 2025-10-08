@@ -22,13 +22,13 @@ public class Room {
     private List<Reservation> reservations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="type_id")
+    @JoinColumn(name = "type_id")
     public RoomType roomType;
 
     public Room() {
     }
 
-    public String getRoomTypeName(){
+    public String getRoomTypeName() {
         return roomType != null ? roomType.getName() : "<Неизвестный тип комнаты>";
     }
 
@@ -39,12 +39,11 @@ public class Room {
     }
 
 
-
     public int getNumber() {
         return number;
     }
 
-    public RoomType getRoom_type() {
+    public RoomType getRoomType() {
         return roomType;
     }
 
@@ -52,7 +51,7 @@ public class Room {
         this.number = number;
     }
 
-    public void setRoom_type(RoomType roomType) {
+    public void setRoomType(RoomType roomType) {
         this.roomType = roomType;
     }
 

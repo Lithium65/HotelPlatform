@@ -49,10 +49,6 @@ public class HotelController {
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Hotel> hotelsPage;
 
-        if(page < 0){
-            page = 0;
-        }
-
         if (country != null && !country.isEmpty()) {
             hotelsPage = hotelService.getHotelsByCountry(country, pageable);
         } else {
@@ -70,7 +66,7 @@ public class HotelController {
     }
 
     @PostMapping("/{id}/delete")
-    public String hotelDelete(@PathVariable(value="id") Long id, Model model){
+    public String hotelDelete(@PathVariable(value = "id") Long id, Model model) {
         roomTypeService.deleteHotelRoomTypes(id);
 
         hotelService.deleteHotel(id);
@@ -85,7 +81,7 @@ public class HotelController {
 
     @PostMapping("/create")
     public String createHotel(@RequestParam("file1") MultipartFile file1, @ModelAttribute Hotel hotel,
-                                 BindingResult bindingResult, Map<String, Object> model) throws IOException {
+                              BindingResult bindingResult, Map<String, Object> model) throws IOException {
         if (bindingResult.hasErrors()) {
             return "hotel-form";
         }
@@ -100,9 +96,7 @@ public class HotelController {
 
             file1.transferTo(new File(uploadDir1, resultFilename1));
             hotel.setFilename1(resultFilename1);
-        }
-
-        else return "redirect:/admin/hotels/create";
+        } else return "redirect:/admin/hotels/create";
         hotelService.createHotel(hotel);
         return "redirect:/admin/hotels";
     }
@@ -111,9 +105,9 @@ public class HotelController {
     public String showEditForm(@PathVariable Long id, Model model) {
         try {
             Hotel hotel = hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException("Hotel not found"));
-        model.addAttribute("hotel.id", hotel.getId());
-        model.addAttribute("hotel", hotel);
-        return "hotel-edit-form";
+            model.addAttribute("hotel.id", hotel.getId());
+            model.addAttribute("hotel", hotel);
+            return "hotel-edit-form";
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -126,27 +120,27 @@ public class HotelController {
         }
         try {
             Hotel existingHotel = hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException("Hotel not found"));
-        if (file1 != null && !file1.isEmpty()) {
-            String uuidFile1 = UUID.randomUUID().toString();
-            String resultFilename1 = uuidFile1 + '.' + file1.getOriginalFilename();
-            File uploadDir1 = new File(uploadPath);
+            if (file1 != null && !file1.isEmpty()) {
+                String uuidFile1 = UUID.randomUUID().toString();
+                String resultFilename1 = uuidFile1 + '.' + file1.getOriginalFilename();
+                File uploadDir1 = new File(uploadPath);
 
-            if (!uploadDir1.exists()) {
-                uploadDir1.mkdirs();
+                if (!uploadDir1.exists()) {
+                    uploadDir1.mkdirs();
+                }
+
+                file1.transferTo(new File(uploadDir1, resultFilename1));
+                if (!uploadDir1.exists()) {
+                    uploadDir1.mkdirs();
+                }
+
+                file1.transferTo(new File(uploadDir1, resultFilename1));
+                hotel.setFilename1(resultFilename1);
+            } else {
+                hotel.setFilename1(existingHotel.getFilename1());
             }
-
-            file1.transferTo(new File(uploadDir1, resultFilename1));
-            if (!uploadDir1.exists()) {
-                uploadDir1.mkdirs();
-            }
-
-            file1.transferTo(new File(uploadDir1, resultFilename1));
-            hotel.setFilename1(resultFilename1);
-        } else {
-            hotel.setFilename1(existingHotel.getFilename1());
-        }
-        hotelService.updateHotel(hotel);
-        return "redirect:/admin/hotels";
+            hotelService.updateHotel(hotel);
+            return "redirect:/admin/hotels";
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }

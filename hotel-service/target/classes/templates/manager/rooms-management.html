@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Управление номерами отеля</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+         .hotel-background {
+            background-image: url('/background/manager-room-management.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .management-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #393939 0%, #474747 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-managing-hotel {
+            background: linear-gradient(135deg, #393939 0%, #474747 100%);
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-managing-hotel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .table-custom {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .table-custom thead {
+            background: linear-gradient(135deg, #393939 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .table-custom th {
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .table-custom td {
+            border: none;
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+                .navbar-nav .nav-link {
+        color: white;
+        }
+
+        .table-custom tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: #f8f9ff;
+            transform: scale(1.01);
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #393939 0%, #474747 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .stats-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+<div class="hotel-background">
+<div th:insert="~{/parts/manager_navbar_macro :: dark_navbar}"></div>
+<div class="container mt-5 main-content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card management-card p-4">
+                <div class="row mb-4">
+                    <div class="col-12 text-center">
+                        <h1 class="header-gradient fw-bold">Управление номерами отеля</h1>
+                        <p class="text-muted">Панель управления номерами и их типами</p>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <a th:href="@{/managing-hotel/hotel-rooms}" class="btn btn-manager">
+                            ← Назад к типам номеров
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <h3 class="stats-number" th:text="${#lists.size(rooms)}">0</h3>
+                            <div class="stats-label">Всего номеров</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <h3 class="stats-number" th:text="${#lists.size(roomType)}">0</h3>
+                            <div class="stats-label">Типов номеров</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <h3 class="stats-number">
+                                <span th:if="${filter != null}">Фильтр</span>
+                                <span th:if="${filter == null}">Все</span>
+                            </h3>
+                            <div class="stats-label">Текущий вид</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="filter-section">
+                            <h5 class="mb-3">📝 Добавить новый номер</h5>
+                            <form method="post" enctype="multipart/form-data" th:action="@{/managing-hotel/hotel-rooms/rooms-management}">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <input type="text" name="number" class="form-control"
+                                               placeholder="Номер комнаты (например: 101)" minlength="1" required/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-select" name="roomTypeId" required>
+                                            <option value="" selected disabled>Выберите тип комнаты</option>
+                                            <option th:each="type : ${roomType}"
+                                                    th:value="${type.id}"
+                                                    th:text="${type.name}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                        <button class="btn btn-managing-hotel w-100" type="submit">
+                                            ➕ Добавить номер
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    ⚠️ [[${errorMessage}]]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="filter-section">
+                            <h5 class="mb-3">🔍 Фильтр номеров</h5>
+                            <form method="get" th:action="@{/managing-hotel/hotel-rooms/rooms-management}" class="row g-3">
+                                <div class="col-md-8">
+                                    <select class="form-select" id="filter" name="filter">
+                                        <option value="">Все типы номеров</option>
+                                        <option th:each="type : ${roomType}"
+                                                th:value="${type.id}"
+                                                th:text="${type.name}"
+                                                th:selected="${filter != null && filter.id == type.id}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-managing-hotel w-100" type="submit">
+                                        🔎 Применить фильтр
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="mt-2">
+                                <a th:href="@{/managing-hotel/hotel-rooms/rooms-management}" class="btn btn-outline-secondary btn-sm">
+                                    🗑️ Сбросить фильтр
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-custom">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Номер комнаты</th>
+                                    <th>Тип номера</th>
+                                    <th>Цена за ночь</th>
+                                    <th>Вместимость</th>
+                                    <th>Действия</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="room, stat : ${rooms}">
+                                    <td th:text="${stat.count}">1</td>
+                                    <td>
+                                        <strong th:text="${room.number}"></strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary" th:text="${room.getRoomTypeName()}"></span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-success" th:text="'$' + ${#numbers.formatDecimal(room.getRoomType().price, 0, 'COMMA', 2, 'POINT')}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${room.getRoomType().places} + ' чел.'"></span>
+                                        <span th:if="${room.getRoomType().baby}" class="badge bg-warning ms-1">👶</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <form th:action="@{/managing-hotel/hotel-rooms/{id}/room-delete(id=${room.roomId})}" method="post">
+                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                <button class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Вы уверены, что хотите удалить номер ' + $(this).closest('tr').find('td:eq(1)').text().trim() + '?')"
+                                                        type="submit">
+                                                    🗑️ Удалить
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(rooms)}">
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        <div class="py-3">
+                                            <h5>Номера не найдены</h5>
+                                            <p class="mb-0">Добавьте первый номер с помощью формы выше</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <div th:insert="~{parts/footer_macro :: footer}"></div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+    });
+</script>
+</body>
+</html>

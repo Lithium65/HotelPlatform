@@ -25,10 +25,14 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public Optional<Hotel> getHotelById(Long id) { return hotelRepo.getHotelById(id); }
+    public Optional<Hotel> getHotelById(Long id) {
+        return hotelRepo.getHotelById(id);
+    }
 
     @Override
-    public void createHotel(Hotel hotel) { hotelRepo.save(hotel); }
+    public void createHotel(Hotel hotel) {
+        hotelRepo.save(hotel);
+    }
 
     @Override
     public void updateHotel(Hotel hotel) {
@@ -36,7 +40,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<Hotel> findAll(){
+    public List<Hotel> findAll() {
         return hotelRepo.findAll();
     }
 
@@ -46,7 +50,9 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public void deleteHotel(Long id) { hotelRepo.deleteById(id); }
+    public void deleteHotel(Long id) {
+        hotelRepo.deleteById(id);
+    }
 
     @Override
     public Page<Hotel> getHotelsByCountry(String country, Pageable pageable) {
@@ -55,17 +61,17 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public void assignHotelToManager(User user, Long hotelId) {
-            if (user.getManagedHotel() != null) {
-                releaseHotelFromManager(user, hotelId);
-            }
-            try {
-                Hotel hotel = hotelRepo.findById(hotelId).orElseThrow(() -> new NotFoundException("Hotel not found"));
-                user.setManagedHotel(hotel);
-                hotel.getManagers().add(user);
-                user.getRoles().add(Role.MANAGER);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        if (user.getManagedHotel() != null) {
+            releaseHotelFromManager(user, hotelId);
+        }
+        try {
+            Hotel hotel = hotelRepo.findById(hotelId).orElseThrow(() -> new NotFoundException("Hotel not found"));
+            user.setManagedHotel(hotel);
+            hotel.getManagers().add(user);
+            user.getRoles().add(Role.MANAGER);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

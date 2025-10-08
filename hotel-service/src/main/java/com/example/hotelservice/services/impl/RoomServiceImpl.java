@@ -5,7 +5,6 @@ import com.example.hotelservice.domain.RoomType;
 import com.example.hotelservice.repos.RoomRepo;
 import com.example.hotelservice.repos.RoomTypeRepo;
 import com.example.hotelservice.services.RoomService;
-import com.example.hotelservice.services.RoomTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAllHotelRooms(long hotelId){
+    public List<Room> getAllHotelRooms(long hotelId) {
         List<Room> hotelRooms = new ArrayList<>();
         List<RoomType> hotelRoomTypes = roomTypeRepo.findByHotelId(hotelId);
         for (RoomType hotelRoomType : hotelRoomTypes) {
@@ -44,21 +43,29 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Iterable<Room> findByRoomType(RoomType filter) { return roomRepo.findByRoomType(filter); }
-
-    @Override
-    public Boolean checkRoomExistence(Room room) {
-        return roomRepo.findByNumberAndRoomType(room.getNumber(), room.getRoom_type()).isPresent();
+    public Iterable<Room> findByRoomType(RoomType filter) {
+        return roomRepo.findByRoomType(filter);
     }
 
     @Override
-    public void save(Room room) { roomRepo.save(room); }
+    public Boolean checkRoomExistence(Room room) {
+        return roomRepo.findByNumberAndRoomType(room.getNumber(), room.getRoomType()).isPresent();
+    }
 
     @Override
-    public Optional<Room> findById(Long id) { return roomRepo.findById(id); }
+    public void save(Room room) {
+        roomRepo.save(room);
+    }
 
     @Override
-    public void delete(Room room) { roomRepo.delete(room); }
+    public Optional<Room> findById(Long id) {
+        return roomRepo.findById(id);
+    }
+
+    @Override
+    public void delete(Room room) {
+        roomRepo.delete(room);
+    }
 }
 
 

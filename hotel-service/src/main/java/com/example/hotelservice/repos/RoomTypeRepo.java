@@ -1,8 +1,5 @@
 package com.example.hotelservice.repos;
 
-import com.example.hotelservice.domain.Hotel;
-import com.example.hotelservice.domain.Reservation;
-import com.example.hotelservice.domain.Room;
 import com.example.hotelservice.domain.RoomType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

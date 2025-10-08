@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.*;
 
 @Controller
-public class RoomController {
+public class AdminController {
 
     @Autowired
     private final RoomService roomService;
@@ -29,7 +29,7 @@ public class RoomController {
     @Autowired
     private final RoomTypeService roomTypeService;
 
-    public RoomController(RoomService roomService, ReservationService reservationService, RoomTypeService roomTypeService) {
+    public AdminController(RoomService roomService, ReservationService reservationService, RoomTypeService roomTypeService) {
         this.roomService = roomService;
         this.reservationService = reservationService;
         this.roomTypeService = roomTypeService;
@@ -65,7 +65,7 @@ public class RoomController {
             @PathVariable(value = "id") Long id,
             Model model) {
 
-        if(roomTypeId == null) {
+        if (roomTypeId == null) {
             return "redirect:/admin/hotels/" + id + "/room-types/add-rooms";
         }
 
@@ -73,9 +73,9 @@ public class RoomController {
         Room room = new Room(number, roomType);
         Boolean room_check = roomService.checkRoomExistence(room);
 
-        if(room_check) {
+        if (room_check) {
             model.addAttribute("errorMessage", "Комната с таким номером уже существует!");
-            return room(id, null, model); // Вызываем метод main для заполнения модели данными
+            return room(id, null, model);
         }
 
         roomService.save(room);
@@ -122,7 +122,7 @@ public class RoomController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/admin/reservations")
-    public String search(Model model,@RequestParam(required = false, defaultValue = "")
+    public String search(Model model, @RequestParam(required = false, defaultValue = "")
     Long filter) {
 
         List<RoomType> roomType = roomTypeService.getAllRoomTypes();
@@ -143,11 +143,11 @@ public class RoomController {
 
     @PostMapping("/admin/{id}/reservation-delete")
     public String reservationDelete(@PathVariable(value = "id") Long id, @AuthenticationPrincipal User user) {
-        if(user.getRoles().contains(Role.ADMIN) ||
+        if (user.getRoles().contains(Role.ADMIN) ||
                 Objects.equals(reservationService.getReservationById(id).get().getUser().getId(), user.getId()))
             reservationService.deleteReservation(id);
 
-        if(user.getRoles().contains(Role.USER))
+        if (user.getRoles().contains(Role.USER))
             return ("redirect:/personal");
         else return ("redirect:/admin/reservations");
     }

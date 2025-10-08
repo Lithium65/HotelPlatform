@@ -25,10 +25,14 @@ public class UserServiceImpl implements UserService {
     private HotelService hotelService;
 
     @Override
-    public List<User> getAllUsers() { return userRepo.findAll(); }
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
 
     @Override
-    public Page<User> getAllUsers(Pageable pageable) { return userRepo.findAll(pageable); }
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepo.findAll(pageable);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,7 +40,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user) { userRepo.save(user); }
+    public void save(User user) {
+        userRepo.save(user);
+    }
 
     @Override
     public Page<User> findByUsernameContaining(String username, Pageable pageable) {
@@ -44,7 +50,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) { return userRepo.findByUsername(username);}
+    public User findByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
 
     @Override
     public void updateUser(Long id, String username, List<String> updatedRoles, Long hotelId) {

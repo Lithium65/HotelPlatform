@@ -70,6 +70,8 @@ public class GreetingController {
     public String redirect(@AuthenticationPrincipal User user) {
         if (user.getRoles().contains(Role.ADMIN)) {
             return "redirect:/admin/reservations";
+        } else if (user.getRoles().contains(Role.MANAGER)) {
+            return "redirect:/managing-hotel";
         } else {
             return "redirect:/personal";
         }
@@ -97,7 +99,7 @@ public class GreetingController {
                                   @RequestParam("checkIn") LocalDate checkIn,
                                   @RequestParam("checkOut") LocalDate checkOut) {
         RoomType roomType = roomTypeService.getRoomTypeById(roomTypeId);
-        if (!otherCountry.isEmpty()){
+        if (!otherCountry.isEmpty()) {
             country = otherCountry;
         }
 
@@ -155,8 +157,7 @@ public class GreetingController {
     public String rooms(
             HttpSession session,
             Model model,
-            @RequestParam(defaultValue = "price,asc") String[] sort)
-    {
+            @RequestParam(defaultValue = "price,asc") String[] sort) {
         List<RoomType> roomTypes = (List<RoomType>) session.getAttribute("roomTypes");
 
         if (roomTypes == null || roomTypes.isEmpty()) {

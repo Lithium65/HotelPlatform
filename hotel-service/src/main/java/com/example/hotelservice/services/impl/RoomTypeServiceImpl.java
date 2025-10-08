@@ -4,15 +4,19 @@ import com.example.hotelservice.domain.Hotel;
 import com.example.hotelservice.domain.Reservation;
 import com.example.hotelservice.domain.Room;
 import com.example.hotelservice.domain.RoomType;
-import com.example.hotelservice.repos.ReservationRepo;
-import com.example.hotelservice.repos.RoomRepo;
 import com.example.hotelservice.repos.RoomTypeRepo;
-import com.example.hotelservice.services.RoomTypeService;
+import com.example.hotelservice.services.*;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -21,13 +25,40 @@ public class RoomTypeServiceImpl implements RoomTypeService {
 
     @Autowired
     private final RoomTypeRepo roomTypeRepo;
+
     @Autowired
-    private RoomRepo roomRepo;
+    private FileService fileService;
+
     @Autowired
-    private ReservationRepo reservationRepo;
+    private RoomService roomService;
+
+    @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
+    private HotelService hotelService;
 
     public RoomTypeServiceImpl(RoomTypeRepo roomTypeRepo) {
         this.roomTypeRepo = roomTypeRepo;
+    }
+
+    @Override
+    public Model getHotelRoomsModel(Long id, Model model, int page, int size, String sortBy, String sortOrder) {
+        Sort sort = sortOrder.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<RoomType> roomTypesPage = getHotelRoomTypes(id, pageable);
+        try {
+            model.addAttribute("hotelName", hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException("Hotel not found")).getHotelName());
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        model.addAttribute("roomTypes", roomTypesPage.getContent());
+        model.addAttribute("hotelId", id);
+        model.addAttribute("currentPage", roomTypesPage.getNumber());
+        model.addAttribute("totalPages", roomTypesPage.getTotalPages() > 0 ? roomTypesPage.getTotalPages() : 0);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortOrder", sortOrder);
+        return model;
     }
 
     @Override
@@ -36,15 +67,15 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     }
 
     @Override
-    public Hotel getHotelByRoomType(RoomType roomType){
+    public Hotel getHotelByRoomType(RoomType roomType) {
         return roomType.getHotel();
     }
 
     @Override
-    public void deleteHotelRoomTypes(long hotelId){
+    public void deleteHotelRoomTypes(long hotelId) {
         List<RoomType> roomTypes = roomTypeRepo.findByHotelId(hotelId);
         for (RoomType roomType : roomTypes) {
-            roomRepo.deleteByRoomType(roomType);
+            roomService.deleteByRoomType(roomType);
         }
         roomTypeRepo.deleteAll(roomTypes);
     }
@@ -55,7 +86,9 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     }
 
     @Override
-    public Page<RoomType> getAllRoomTypes(Pageable pageable) { return roomTypeRepo.findAll(pageable); }
+    public Page<RoomType> getAllRoomTypes(Pageable pageable) {
+        return roomTypeRepo.findAll(pageable);
+    }
 
     @Override
     public List<RoomType> getHotelRoomTypes(Long hotel_id) {
@@ -68,7 +101,7 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     }
 
     @Override
-    public void deleteRoomType(Long id){
+    public void deleteRoomType(Long id) {
         roomTypeRepo.deleteById(id);
     }
 
@@ -99,12 +132,11 @@ public class RoomTypeServiceImpl implements RoomTypeService {
 
         for (RoomType roomType : roomTypes) {
             if (numberOfPeople < 5) {
-                if(baby) {
+                if (baby) {
                     if (!(Objects.equals(getHotelByRoomType(roomType).getCity(), city) && roomType.getPlaces() == numberOfPeople && roomType.isBaby() == baby)) {
                         continue;
                     }
-                }
-                else if (!(Objects.equals(getHotelByRoomType(roomType).getCity(), city) && roomType.getPlaces() == numberOfPeople)) {
+                } else if (!(Objects.equals(getHotelByRoomType(roomType).getCity(), city) && roomType.getPlaces() == numberOfPeople)) {
                     continue;
                 }
             } else {
@@ -119,11 +151,11 @@ public class RoomTypeServiceImpl implements RoomTypeService {
                 }
             }
 
-            List<Room> rooms = roomRepo.findByRoomType(roomType);
+            Iterable<Room> rooms = roomService.findByRoomType(roomType);
             boolean isRoomAvailable = false;
 
             for (Room room : rooms) {
-                List<Reservation> roomConflictingReservations = reservationRepo.findByRoomAndCheckInLessThanEqualAndCheckOutGreaterThanEqual(room, checkOutDate, checkInDate);
+                List<Reservation> roomConflictingReservations = reservationService.findByRoomAndCheckInLessThanEqualAndCheckOutGreaterThanEqual(room, checkOutDate, checkInDate);
 
                 if (roomConflictingReservations == null || roomConflictingReservations.isEmpty()) {
                     isRoomAvailable = true;
