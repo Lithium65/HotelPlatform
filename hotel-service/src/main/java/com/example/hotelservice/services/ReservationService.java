@@ -1,94 +1,48 @@
 package com.example.hotelservice.services;
 
-import com.example.hotelservice.domain.*;
-import com.example.hotelservice.repos.HotelRepo;
-import com.example.hotelservice.repos.ReservationRepo;
-import com.example.hotelservice.repos.RoomRepo;
-import com.example.hotelservice.repos.RoomTypeRepo;
+import com.example.hotelservice.domain.Reservation;
+import com.example.hotelservice.domain.Room;
+import com.example.hotelservice.domain.RoomType;
+import com.example.hotelservice.domain.User;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class ReservationService {
+public interface ReservationService {
 
-    private final ReservationRepo reservationRepo;
-    private final RoomRepo roomRepo;
-    private final HotelRepo hotelRepo;
-    private final RoomTypeRepo roomTypeRepo;
+    List<Reservation> getAllReservations();
 
-    public ReservationService(ReservationRepo reservationRepo, RoomRepo roomRepo, HotelRepo hotelRepo, RoomTypeRepo roomTypeRepo) {
-        this.reservationRepo = reservationRepo;
-        this.roomRepo = roomRepo;
-        this.hotelRepo = hotelRepo;
-        this.roomTypeRepo = roomTypeRepo;
-    }
+    Page<Reservation> getAllReservations(Pageable pageable);
 
-    public List<Reservation> getAllReservations() {
-        return (List<Reservation>) reservationRepo.findAll();
-    }
+    Iterable<Reservation> getReservationsByUser(User user);
 
-    public Page<Reservation> getAllReservations(Pageable pageable) {
-        return reservationRepo.findAll(pageable);
-    }
+    Optional<Reservation> getReservationById(long id);
 
-    public Iterable<Reservation> getReservationsByUser(User user) { return reservationRepo.findByUser(user); }
+    Page<Reservation> findByHotelId(@Param("hotelId") Long hotelId, Pageable pageable);
 
-    public Optional<Reservation> getReservationById(long id) { return reservationRepo.findById(id); }
+    List<Reservation> findByHotelId(@Param("hotelId") Long hotelId);
 
-    public void createReservation(Reservation reservation, RoomType roomType) {
-        List<Room> rooms = roomRepo.findByRoomType(roomType);
-        LocalDate checkIn = reservation.getCheckIn();
-        LocalDate checkOut = reservation.getCheckOut();
+    void createReservation(Reservation reservation, RoomType roomType);
 
-        if(checkIn.isAfter(checkOut))
-        {
-            throw new RuntimeException("Выбраны неверные даты");
-        }
+    List<Reservation> findFilteredReservationsByRoomTypeAndDate(Long roomTypeId, LocalDate date, Boolean isCheckOut);
 
-        List<Reservation> conflictingReservations = new ArrayList<>();
-        Room room = null;
+    List<Reservation> findFilteredReservationsByDate(Long hotelId, LocalDate date, Boolean isCheckOut);
 
-        for (int i = 0; i < rooms.size(); i++) {
-            List<Reservation> roomConflictingReservations = reservationRepo.findByRoomAndCheckInLessThanEqualAndCheckOutGreaterThanEqual(rooms.get(i), checkOut, checkIn);
-            if (roomConflictingReservations.isEmpty()){
-                room = rooms.get(i);
-                break;
-            }
-            if (i == rooms.size() - 1 && conflictingReservations != null) {
-                conflictingReservations.addAll(roomConflictingReservations);
-            }
-        }
+    List<Reservation> findFilteredReservationsByRoomType(Long roomTypeId);
 
-        if (conflictingReservations.isEmpty()) {
-            reservation.setRoom(room);
-            reservationRepo.save(reservation);
-        } else {
-            throw new RuntimeException("Нет доступных комнат заданного типа в выбранные даты");
-        }
+    Page<Reservation> getReservationsByHotelName(String hotelName, Pageable pageable);
 
-    }
+    void deleteReservation(Long id);
 
-    public Page<Reservation> getReservationsByHotelName(String hotelName, Pageable pageable) {
-        return reservationRepo.findByHotelName(hotelName, pageable);
-    }
+    void deleteReservationWithConformation(Long id, Long hotelId);
 
-    public void deleteReservation(Long id){
-        reservationRepo.deleteById(id);
-    }
+    List<Reservation> findByRoom(Room room);
 
-    public List<Reservation> findByRoom(Optional<Room> room) { return reservationRepo.findByRoom(room); }
+    List<Reservation> findByRoomType(RoomType filter);
 
-    public List<Reservation> findByRoomType(RoomType filter) { return reservationRepo.findByRoomRoomType(filter); }
-
-    public List<Reservation> findConflictingReservations(Room room, LocalDate checkOutDate, LocalDate checkInDate) { return reservationRepo.findByRoomAndCheckInLessThanEqualAndCheckOutGreaterThanEqual(room, checkOutDate, checkInDate); }
+    List<Reservation> findByRoomAndCheckInLessThanEqualAndCheckOutGreaterThanEqual(Room room, LocalDate checkOutDate, LocalDate checkInDate);
 }
-
-

@@ -1,66 +1,29 @@
 package com.example.hotelservice.services;
 
 import com.example.hotelservice.domain.Hotel;
-import com.example.hotelservice.repos.HotelRepo;
+import com.example.hotelservice.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-@Service
-public class HotelService {
-    private final HotelRepo hotelRepo;
+public interface HotelService {
+    Optional<Hotel> getHotelById(Long id);
 
-    public HotelService(HotelRepo hotelRepo) {
-        this.hotelRepo = hotelRepo;
-    }
+    void createHotel(Hotel hotel);
 
-    public List<Hotel> getAllHotels() {
-        return hotelRepo.findAll();
-    }
+    void updateHotel(Hotel hotel);
 
-    public Hotel getHotelById(Long id) { return hotelRepo.getHotelById(id); }
+    List<Hotel> findAll();
 
-    public void createHotel(Hotel hotel) { hotelRepo.save(hotel); }
+    Page<Hotel> getAllHotels(Pageable pageable);
 
-    public void updateHotel(Hotel hotel) {
-        Hotel existingHotel = hotelRepo.findById(hotel.getId()).orElse(null);
-        existingHotel = hotel;
-        hotelRepo.save(existingHotel);
-    }
+    void deleteHotel(Long id);
 
-    public Optional<Hotel> findById(Long id){
-        return hotelRepo.findById(id);
-    }
+    Page<Hotel> getHotelsByCountry(String country, Pageable pageable);
 
-    public List<Hotel> findByCountry(String country){
-        return hotelRepo.findByCountry(country);
-    }
+    void assignHotelToManager(User user, Long hotelId);
 
-    public List<Hotel> findByCity(String city){
-        return hotelRepo.findByCity(city);
-    }
-
-    public List<Hotel> findAll(){
-        return hotelRepo.findAll();
-    }
-
-    public List<Hotel> findByCountryAndCity(String country, String city){
-        return hotelRepo.findByCountryAndCity(country, city);
-    }
-
-    public Page<Hotel> getAllHotels(Pageable pageable) {
-        return hotelRepo.findAll(pageable);
-    }
-
-    public void deleteHotel(Long id) { hotelRepo.deleteById(id); }
-
-    public Page<Hotel> getHotelsByCountry(String country, Pageable pageable) {
-        return hotelRepo.findByCountry(country, pageable);
-    }
-
+    void releaseHotelFromManager(User user, Long hotelId);
 }

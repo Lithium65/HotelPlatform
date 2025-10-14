@@ -12,9 +12,9 @@
 <div class="container mt-5 main-content">
     <div class="header-container">
         <h1 class="text-center">Отели</h1>
-        <a class="btn btn-success" th:href="@{/main/hotels/create}">Добавить отель</a>
+        <a class="btn btn-success" th:href="@{/admin/hotels/create}">Добавить отель</a>
     </div>
-    <form method="get" th:action="@{/main/hotels}" class="mb-3">
+    <form method="get" th:action="@{/admin/hotels}" class="mb-3">
         <div class="input-group">
             <input type="text" class="form-control" id="country" name="country" placeholder="Введите страну" th:value="${country}">
             <button class="btn btn-primary" type="submit">Найти</button>
@@ -25,7 +25,7 @@
         <tr>
             <th>
                 Название
-                <a th:href="@{'/main/hotels?page=' + ${currentPage} + '&sortBy=hotelName&sortOrder=' + ${sortOrder == 'asc' ? 'desc' : 'asc'}}">
+                <a th:href="@{'/admin/hotels?page=' + ${currentPage} + '&sortBy=hotelName&sortOrder=' + ${sortOrder == 'asc' ? 'desc' : 'asc'}}">
                     <span th:if="${sortBy == 'hotelName' && sortOrder == 'asc'}">&#9650;</span>
                     <span th:if="${sortBy == 'hotelName' && sortOrder == 'desc'}">&#9660;</span>
                 </a>
@@ -44,13 +44,13 @@
             <td th:text="${hotel.street}"></td>
             <td>
                 <div style="display: flex; gap: 10px;">
-                    <form th:action="@{/main/hotels/{id}/edit(id=${hotel.id})}">
+                    <form th:action="@{/admin/hotels/{id}/edit(id=${hotel.id})}">
                         <button type="submit" class="btn btn-primary">Редактировать</button>
                     </form>
-                    <form th:action="@{/main/hotels/{id}/room-types(id=${hotel.id})}">
+                    <form th:action="@{/admin/hotels/{id}/room-types(id=${hotel.id})}">
                         <button type="submit" class="btn btn-primary">Категории номеров</button>
                     </form>
-                    <form th:action="@{/main/hotels/{id}/delete(id=${hotel.id})}" method="post">
+                    <form th:action="@{/admin/hotels/{id}/delete(id=${hotel.id})}" method="post">
                         <button type="submit" onclick="return confirmAction()" class="btn btn-danger">Удалить</button>
                     </form>
                 </div>
@@ -61,16 +61,16 @@
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{'/main/hotels?page=' + ${currentPage - 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&country=' + ${country}}" aria-label="Previous">
+                <a class="page-link" th:href="@{'/admin/hotels?page=' + ${currentPage - 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&country=' + ${country}}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                 th:classappend="${i == currentPage} ? 'active'">
-                <a class="page-link" th:href="@{'/main/hotels?page=' + ${i} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&country=' + ${country}}" th:text="${i + 1}"></a>
+                <a class="page-link" th:href="@{'/admin/hotels?page=' + ${i} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&country=' + ${country}}" th:text="${i + 1}"></a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{'/main/hotels?page=' + ${currentPage + 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&country=' + ${country}}" aria-label="Next">
+                <a class="page-link" th:href="@{'/admin/hotels?page=' + ${currentPage + 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&country=' + ${country}}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

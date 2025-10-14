@@ -1,12 +1,9 @@
 package com.example.hotelservice.controller;
 
 import com.example.hotelservice.domain.Hotel;
-import com.example.hotelservice.domain.Reservation;
-import com.example.hotelservice.domain.Room;
-import com.example.hotelservice.domain.RoomType;
 import com.example.hotelservice.services.HotelService;
-import com.example.hotelservice.services.RoomService;
 import com.example.hotelservice.services.RoomTypeService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,14 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Controller
 @PreAuthorize("hasAuthority('ADMIN')")
-@RequestMapping("/main/hotels")
+@RequestMapping("/admin/hotels")
 public class HotelController {
 
     @Autowired
@@ -54,10 +49,6 @@ public class HotelController {
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Hotel> hotelsPage;
 
-        if(page < 0){
-            page = 0;
-        }
-
         if (country != null && !country.isEmpty()) {
             hotelsPage = hotelService.getHotelsByCountry(country, pageable);
         } else {
@@ -75,12 +66,11 @@ public class HotelController {
     }
 
     @PostMapping("/{id}/delete")
-    public String hotelDelete(@PathVariable(value="id") Long id, Model model){
-        Hotel hotel = hotelService.getHotelById(id);
+    public String hotelDelete(@PathVariable(value = "id") Long id, Model model) {
         roomTypeService.deleteHotelRoomTypes(id);
 
         hotelService.deleteHotel(id);
-        return "redirect:/main/hotels";
+        return "redirect:/admin/hotels";
     }
 
     @GetMapping("/create")
@@ -91,7 +81,7 @@ public class HotelController {
 
     @PostMapping("/create")
     public String createHotel(@RequestParam("file1") MultipartFile file1, @ModelAttribute Hotel hotel,
-                                 BindingResult bindingResult, Map<String, Object> model) throws IOException {
+                              BindingResult bindingResult, Map<String, Object> model) throws IOException {
         if (bindingResult.hasErrors()) {
             return "hotel-form";
         }
@@ -106,19 +96,21 @@ public class HotelController {
 
             file1.transferTo(new File(uploadDir1, resultFilename1));
             hotel.setFilename1(resultFilename1);
-        }
-
-        else return "redirect:/main/hotels/create";
+        } else return "redirect:/admin/hotels/create";
         hotelService.createHotel(hotel);
-        return "redirect:/main/hotels";
+        return "redirect:/admin/hotels";
     }
 
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Hotel hotel = hotelService.getHotelById(id);
-        model.addAttribute("hotel.id", hotel.getId());
-        model.addAttribute("hotel", hotel);
-        return "hotel-edit-form";
+        try {
+            Hotel hotel = hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException("Hotel not found"));
+            model.addAttribute("hotel.id", hotel.getId());
+            model.addAttribute("hotel", hotel);
+            return "hotel-edit-form";
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/{id}/edit")
@@ -126,27 +118,31 @@ public class HotelController {
         if (bindingResult.hasErrors()) {
             return "editHotel";
         }
-        Hotel existingHotel = hotelService.getHotelById(id);
-        if (file1 != null && !file1.isEmpty()) {
-            String uuidFile1 = UUID.randomUUID().toString();
-            String resultFilename1 = uuidFile1 + '.' + file1.getOriginalFilename();
-            File uploadDir1 = new File(uploadPath);
+        try {
+            Hotel existingHotel = hotelService.getHotelById(id).orElseThrow(() -> new NotFoundException("Hotel not found"));
+            if (file1 != null && !file1.isEmpty()) {
+                String uuidFile1 = UUID.randomUUID().toString();
+                String resultFilename1 = uuidFile1 + '.' + file1.getOriginalFilename();
+                File uploadDir1 = new File(uploadPath);
 
-            if (!uploadDir1.exists()) {
-                uploadDir1.mkdirs();
+                if (!uploadDir1.exists()) {
+                    uploadDir1.mkdirs();
+                }
+
+                file1.transferTo(new File(uploadDir1, resultFilename1));
+                if (!uploadDir1.exists()) {
+                    uploadDir1.mkdirs();
+                }
+
+                file1.transferTo(new File(uploadDir1, resultFilename1));
+                hotel.setFilename1(resultFilename1);
+            } else {
+                hotel.setFilename1(existingHotel.getFilename1());
             }
-
-            file1.transferTo(new File(uploadDir1, resultFilename1));
-            if (!uploadDir1.exists()) {
-                uploadDir1.mkdirs();
-            }
-
-            file1.transferTo(new File(uploadDir1, resultFilename1));
-            hotel.setFilename1(resultFilename1);
-        } else {
-            hotel.setFilename1(existingHotel.getFilename1());
+            hotelService.updateHotel(hotel);
+            return "redirect:/admin/hotels";
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
         }
-        hotelService.updateHotel(hotel);
-        return "redirect:/main/hotels";
     }
 }

@@ -1,39 +1,27 @@
 package com.example.hotelservice.services;
 
 import com.example.hotelservice.domain.User;
-import com.example.hotelservice.repos.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class UserService implements UserDetailsService {
+public interface UserService extends UserDetailsService {
+    List<User> getAllUsers();
 
-    @Autowired
-    private UserRepo userRepo;
-
-    public List<User> getAllUsers() { return userRepo.findAll(); }
-
-    public Page<User> getAllUsers(Pageable pageable) { return userRepo.findAll(pageable); }
+    Page<User> getAllUsers(Pageable pageable);
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username);
-    }
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
-    public void save(User user) { userRepo.save(user); }
+    void save(User user);
 
-    public Page<User> findByUsernameContaining(String username, Pageable pageable) {
-        return userRepo.findByUsernameContaining(username, pageable);
-    }
+    Page<User> findByUsernameContaining(String username, Pageable pageable);
 
-    public User findByUsername(String username) { return userRepo.findByUsername(username);}
+    User findByUsername(String username);
 
+    void updateUser(Long id, String username, List<String> roles, Long hotelId);
 }
-

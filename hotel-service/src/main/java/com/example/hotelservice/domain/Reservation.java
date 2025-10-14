@@ -30,11 +30,11 @@ public class Reservation {
     private String country;
 
     public String getRoomTypeName(){
-        return room.getRoom_type() != null ? room.getRoom_type().getName() : "<Неизвестный тип комнаты>";
+        return room.getRoomType() != null ? room.getRoomType().getName() : "<Неизвестный тип комнаты>";
     }
 
     public RoomType getRoomType(){
-        return room.getRoom_type();
+        return room.getRoomType();
     }
 
     public LocalDate getCheckIn() {
@@ -120,5 +120,5 @@ public class Reservation {
         this.checkOut = checkOut;
     }
 
-//    public RoomType getRoomType() { return room.getRoom_type(); }
+//    public RoomType getRoomType() { return room.getRoomType(); }
 }

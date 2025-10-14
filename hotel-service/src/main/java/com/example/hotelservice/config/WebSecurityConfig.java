@@ -18,12 +18,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
 
-import static org.springframework.web.servlet.function.RequestPredicates.headers;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig{
+public class WebSecurityConfig {
 
     @Lazy
     @Autowired
@@ -47,10 +45,11 @@ public class WebSecurityConfig{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/registration", "/about","/rooms",
+                        .requestMatchers("/", "/registration", "/about", "/rooms",
                                 "/all-rooms", "/hotels-view", "/search").permitAll()
                         .requestMatchers("/Pictures&Stuff/**").permitAll()
                         .requestMatchers("/static/css/**").permitAll()
+                        .requestMatchers("/static/background/**").permitAll()
                         .requestMatchers("/room/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -65,9 +64,7 @@ public class WebSecurityConfig{
                 .logout((logout) -> logout.logoutSuccessUrl("/"));
 
 
-
         return http.build();
-
 
 
     }

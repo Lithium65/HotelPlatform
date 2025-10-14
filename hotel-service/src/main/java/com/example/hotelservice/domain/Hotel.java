@@ -3,6 +3,9 @@ package com.example.hotelservice.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "hotels")
 public class Hotel {
@@ -25,10 +28,13 @@ public class Hotel {
     @NotNull(message = "Файл не может быть пустым")
     private String filename1;
 
+    @OneToMany(mappedBy = "managedHotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<User> managers = new HashSet<>();
+
     public Hotel() {
     }
 
-    public Hotel(Long id, String googleMap, String hotelName, String street, String city, String country, String description, String filename1) {
+    public Hotel(Long id, String googleMap, String hotelName, String street, String city, String country, String description, String filename1, Set<User> managers) {
         this.id = id;
         this.googleMap = googleMap;
         this.hotelName = hotelName;
@@ -37,6 +43,7 @@ public class Hotel {
         this.country = country;
         this.description = description;
         this.filename1 = filename1;
+        this.managers = managers;
     }
 
     public Long getId() {
@@ -101,5 +108,13 @@ public class Hotel {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public Set<User> getManagers() {
+        return managers;
+    }
+
+    public void setManagers(Set<User> managers) {
+        this.managers = managers;
     }
 }

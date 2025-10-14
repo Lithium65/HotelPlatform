@@ -39,6 +39,10 @@
         .dropdown-menu {
             font-size: 14px;
         }
+
+        .navbar-nav .nav-link {
+        color: white;
+        }
     </style>
 </head>
 <body>
@@ -52,9 +56,9 @@
                         Панель администрирования
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" th:href="@{/main/user}">Менеджер пользователей</a></li>
-                        <li><a class="dropdown-item" th:href="@{/main/hotels}">Менеджер отелей</a></li>
-                        <li><a class="dropdown-item" th:href="@{/main/reservations}">Менеджер бронирований</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/user}">Менеджер пользователей</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/hotels}">Менеджер отелей</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/reservations}">Менеджер бронирований</a></li>
                     </ul>
                 </div>
             </div>

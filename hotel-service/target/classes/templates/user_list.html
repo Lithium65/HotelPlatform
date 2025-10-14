@@ -29,7 +29,7 @@
         <h3 class="text-shadow">Управляйте учётными записями пользователей</h3>
         <h5 class="text-shadow">И не забывайте о безопасности</h5>
     </div>
-    <form method="get" action="/main/user" class="mb-3">
+    <form method="get" action="/admin/user" class="mb-3">
         <div class="input-group">
             <input type="text" class="form-control" id="username" name="username" placeholder="Введите почту" th:value="${username}">
             <button class="btn btn-primary" type="submit">Найти</button>
@@ -41,7 +41,7 @@
         <tr>
             <th>
                 Почта
-                <a th:href="@{'/main/user?page=' + ${currentPage} + '&sortBy=username&sortOrder=' + ${sortOrder == 'asc' ? 'desc' : 'asc'}}">
+                <a th:href="@{'/admin/user?page=' + ${currentPage} + '&sortBy=username&sortOrder=' + ${sortOrder == 'asc' ? 'desc' : 'asc'}}">
                     <span th:if="${sortBy == 'username' && sortOrder == 'asc'}">&#9650;</span>
                     <span th:if="${sortBy == 'username' && sortOrder == 'desc'}">&#9660;</span>
                 </a>
@@ -65,16 +65,16 @@
     <nav aria-label="Page navigation" th:if="${totalPages > 0}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{'/main/user?page=' + ${currentPage - 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&username=' + ${username}}" aria-label="Previous">
+                <a class="page-link" th:href="@{'/admin/user?page=' + ${currentPage - 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&username=' + ${username}}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                 th:classappend="${i == currentPage} ? 'active'">
-                <a class="page-link" th:href="@{'/main/user?page=' + ${i} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&username=' + ${username}}" th:text="${i + 1}"></a>
+                <a class="page-link" th:href="@{'/admin/user?page=' + ${i} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&username=' + ${username}}" th:text="${i + 1}"></a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{'/main/user?page=' + ${currentPage + 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&username=' + ${username}}" aria-label="Next">
+                <a class="page-link" th:href="@{'/admin/user?page=' + ${currentPage + 1} + '&sortBy=' + ${sortBy} + '&sortOrder=' + ${sortOrder} + '&username=' + ${username}}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

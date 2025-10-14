@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name ="users")
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,12 +23,26 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id", unique = true)
+    private Hotel managedHotel;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
     public User() {
+    }
+
+    public User(Long id, String username, String password, boolean active, List<Reservation> reservations, Hotel managedHotel, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.active = active;
+        this.reservations = reservations;
+        this.managedHotel = managedHotel;
+        this.roles = roles;
     }
 
     public void setId(Long id) {
@@ -102,5 +116,13 @@ public class User implements UserDetails {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public Hotel getManagedHotel() {
+        return managedHotel;
+    }
+
+    public void setManagedHotel(Hotel managedHotel) {
+        this.managedHotel = managedHotel;
     }
 }
